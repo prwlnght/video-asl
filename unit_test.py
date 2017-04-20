@@ -3,7 +3,7 @@ from label_image import predict_video
 
 is_test_video = True
 
-image_folder = "C:\\Users\\ppaudyal\\workspace\\video-asl\\tf_files\\flower_photos\\finish"
+video_folder = "C:\\Users\\ppaudyal\\workspace\\video-asl\\tf_files\\flower_photos"
 
 
 #take a video
@@ -12,4 +12,5 @@ image_folder = "C:\\Users\\ppaudyal\\workspace\\video-asl\\tf_files\\flower_phot
 #parse vide
 
 if(is_test_video):
-    prediction_matrix = predict_video(image_folder)
+    for path in os.listdir(video_folder):
+        predict_video(video_folder+ "\\" + path)

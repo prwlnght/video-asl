@@ -4,14 +4,20 @@
 import tensorflow as tf, sys
 import os
 import numpy as np
+import time
+from visualizer import visualize
 
 #change these if they lie somewhere else
 retrained_labels = "tf_files\\retrained_labels.txt"
 retrained_graph = "tf_files\\retrained_graph.pb"
+visualization_save_location = "visualized"
+matrix_save_location = "video_matrices"
 #TODO get this dynamically from file
 number_of_classes = 6
+prediction_matrix_path = "prediction_matrices"
 
-#predict Video takes a video sample of image files and puts a graph out with labels corresponding to y axis
+#predict Video takes a video sample of image files and puts a graph out with labels corresponding to y
+#TODO get path to actual video and create the frames as a subfolder in the path
 def predict_video(path):
 
     #create an empty numpy array with zeroes
@@ -36,6 +42,12 @@ def predict_video(path):
             # sort to show labels of first prediction in order of confidence
             predictions_matrix[file_counter] = predictions
             file_counter = file_counter + 1
+    #save the prediction matrix and the visualized graph to separate folders
+    out_name =  "prediction_matrix_" + path.split("\\")[-1] + "_" + time.strftime("%Y%m%d-%H%M%S") + ".txt"
+    out_path_name = prediction_matrix_path + "\\" + out_name
+    np.savetxt(out_path_name, predictions_matrix, fmt='%.18e', delimiter=' ', newline='\n', header='',
+               footer='', comments='# ')
+    visualize(out_path_name, None, path.split("\\")[-1])
     return predictions_matrix
 
 def sample_predict(image_path):
@@ -63,5 +75,4 @@ def sample_predict(image_path):
 #sample_predict("C:\\Users\\ppaudyal\\workspace\\video-asl\\tf_files\\flower_photos\\finish\\100001.jpg")
 
 
-prediction_matrix = predict_video("C:\\Users\\ppaudyal\\workspace\\video-asl\\tf_files\\flower_photos\\finish")
-np.savetxt("name", prediction_matrix, fmt='%.18e', delimiter=' ', newline='\n', header='', footer='', comments='# ')
+
